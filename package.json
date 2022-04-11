@@ -1,0 +1,11 @@
+{
+    "name": "cuasar-game-component-system",
+    "version": "0.0.1",
+    "license": "MIT",
+    "devDependencies": {
+        "typescript": "^4.4.3"
+    },
+    "scripts": {
+        "start": "deno run main.ts"
+    }
+}
