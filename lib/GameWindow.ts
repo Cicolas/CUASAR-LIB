@@ -1,5 +1,5 @@
 // deno-lint-ignore-file no-inferrable-types
-import Scene from "./Scene.ts";
+import Scene from "./Scene";
 
 export default class GameWindow {
     private _name: string = "";
@@ -31,7 +31,7 @@ export default class GameWindow {
     }
 
     public pushScene(scene: Scene): GameWindow {
-        this.scene.push(scene.initScene(this));
+        this.scene.push(scene);
         return this;
     }
     public popScene(): GameWindow {

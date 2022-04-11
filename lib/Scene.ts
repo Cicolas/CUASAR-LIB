@@ -1,6 +1,6 @@
 // deno-lint-ignore-file no-inferrable-types
-import GameWindow from "./GameWindow.ts";
-import GObject from "./GObject.ts";
+import GameWindow from "./GameWindow";
+import GObject from "./GObject";
 
 export default class Scene {
     private name: string = "";

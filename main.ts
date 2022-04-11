@@ -1,21 +1,3 @@
-// deno-lint-ignore-file no-unused-vars ban-unused-ignore
-import MyComponent from "./components/MyComponent.ts";
-import GameWindow from './lib/GameWindow.ts';
-import GObject from "./lib/GObject.ts";
-import Scene from "./lib/Scene.ts";
-
-new GameWindow("tela")
-.setResolution(512, 512)
-.pushScene(
-    new Scene("cena1")
-    .addObject(
-        new GObject("objeto1")
-        .addComponent(new MyComponent)
-    )
-)
-.initGame()
-.updateNRender()
-
 /* PILE ASTRO MARKUP LANGUAGE .paml
 <paml>
     <GameWindow name="tela" width=512 height=512>
@@ -28,3 +10,15 @@ new GameWindow("tela")
     </GameWindow>
 </paml>
 */
+
+import MyComponent from "./components/MyComponent";
+import PAMLReader from './lib/PAML';
+
+new PAMLReader({
+    componentMap: [
+        {name: "MyComponent", fun: MyComponent}
+    ]
+})
+.read()
+.initGame()
+.updateNRender();
