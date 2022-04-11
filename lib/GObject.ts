@@ -1,6 +1,6 @@
 // deno-lint-ignore-file no-inferrable-types
-import ComponentInterface from "./Component.ts";
-import GameWindow from "./GameWindow.ts";
+import ComponentInterface from "./Component";
+import GameWindow from "./GameWindow";
 
 export default class GObject {
     private _name: string = "";

@@ -1,7 +1,7 @@
 // deno-lint-ignore-file no-unused-vars
-import ComponentInterface from "../lib/Component.ts";
-import GameWindow from "../lib/GameWindow.ts";
-import GObject from "../lib/GObject.ts";
+import ComponentInterface from "../lib/Component";
+import GameWindow from "../lib/GameWindow";
+import GObject from "../lib/GObject";
 
 export default class MyComponent implements ComponentInterface {
     public name = "My Component";

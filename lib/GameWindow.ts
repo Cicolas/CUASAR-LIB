@@ -1,5 +1,5 @@
 // deno-lint-ignore-file no-inferrable-types
-import Scene from "./Scene.ts";
+import Scene from "./Scene";
 
 export default class GameWindow {
     private _name: string = "";
