@@ -1,9 +1,11 @@
 // deno-lint-ignore-file no-inferrable-types
-import GameWindow from "./GameWindow";
-import GObject from "./GObject";
+import GameWindow from "./GameWindow.ts";
+import GObject from "./GObject.ts";
 
 export default class Scene {
-    private name: string = "";
+    #name: string = "";
+    public get name() : string { return this.#name; }
+    private set name(v: string) { this.#name = v; }
 
     private objects: GObject[] = [];
 
@@ -11,26 +13,22 @@ export default class Scene {
         this.name = name;
     }
 
-    public addObject(obj: GObject): Scene {
-        // obj.forEach(value => {
-        //     this.objects.push(value);
-        // });
-        this.objects.push(obj);
+    public addObject(...objs: GObject[]): Scene {
+        for (let i = 0; i < objs.length; i++) {
+            this.objects.push(objs[i]);
+        }
         return this;
     }
 
-    public getObject(name: string): GObject | undefined {
-        return this.objects.find(value =>
+    public getObjects(name: string): GObject[] | undefined {
+        return this.objects.filter(value =>
             value.name === name
         );
     }
 
     public initScene(gameWin: GameWindow): Scene {
         for (let i = 0; i < this.objects.length; i++) {
-            this.objects[i].initObject(gameWin);
-        }
-        for (let i = 0; i < this.objects.length; i++) {
-            this.objects[i].postInitObject(gameWin);
+            this.objects[i].initObject(gameWin).postInitObject(gameWin);
         }
         return this;
     }
@@ -55,9 +53,7 @@ export default class Scene {
 
     public end(gameWin: GameWindow): GObject[] {
         for (let i = 0; i < this.objects.length; i++) {
-            if (!this.objects[i].dontDestroy) {
-                this.objects[i].destroy(gameWin);
-            }
+            if (!this.objects[i].dontDestroy) this.objects[i].destroy(gameWin);
         }
 
         return this.objects.filter((value) => value.dontDestroy)

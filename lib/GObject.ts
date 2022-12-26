@@ -1,19 +1,21 @@
 // deno-lint-ignore-file no-inferrable-types
-import ComponentInterface from "./Component";
-import GameWindow from "./GameWindow";
+import ComponentInterface from "./Component.ts";
+import GameWindow from "./GameWindow.ts";
 
 export default class GObject {
-    private _name: string = "";
-    public dontDestroy?: boolean = false;
+    #name: string = "";
+    public get name() : string { return this.#name; }
+    private set name(v: string) { this.#name = v; }
 
-    public get name() : string {
-        return this._name;
-    }
+    #dontDestroy: boolean = false;
+    public get dontDestroy(): boolean { return this.#dontDestroy; }
+    protected set dontDestroy(v: boolean) { this.#dontDestroy = true; }
 
     private components: ComponentInterface[] = [];
 
-    constructor(name: string) {
-        this._name = name;
+    constructor(name: string, dontDestroy: boolean = false) {
+        this.name = name;
+        this.dontDestroy = dontDestroy;
     }
 
     public addComponent(...components: ComponentInterface[]): GObject{
@@ -23,45 +25,43 @@ export default class GObject {
         return this;
     }
 
+    public getComponent<T extends ComponentInterface>(t: {new(): T}): T | undefined {
+        return this.components.find(value =>
+            value.constructor === t
+        ) as T;
+    }
+
     public initObject(gameWin: GameWindow): GObject {
         for (let i = 0; i < this.components.length; i++) {
-            this.components[i].init(this, gameWin);
+            this.components[i].init?.call(this.components[i], this, gameWin);
         }
         return this;
     }
 
     public postInitObject(gameWin: GameWindow): GObject {
         for (let i = 0; i < this.components.length; i++) {
-            this.components[i].postInit(this, gameWin);
+            this.components[i].postInit?.call(this.components[i], this, gameWin);
         }
         return this;
     }
 
     public updateObject(gameWin: GameWindow): GObject {
         for (let i = 0; i < this.components.length; i++) {
-            this.components[i].update(this, gameWin);
+            this.components[i].update?.call(this.components[i], this, gameWin);
         }
         return this;
     }
 
     public drawObject(): GObject {
         for (let i = 0; i < this.components.length; i++) {
-            this.components[i].draw();
+            this.components[i].draw?.call(this.components[i]);
         }
         return this;
     }
 
-    // deno-lint-ignore ban-types
-    public getComponent(t: Function): Object | undefined {
-        return this.components.find(value =>
-            // deno-lint-ignore ban-types
-            (value as Object).constructor.name === t.name
-        );
-    }
-
     public destroy(gameWin: GameWindow) {
         for (let i = 0; i < this.components.length; i++) {
-            this.components[i].destroy(gameWin);
+            this.components[i].draw?.call(this.components[i], gameWin);
         }
     }
 }

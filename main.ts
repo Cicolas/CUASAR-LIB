@@ -1,15 +1,16 @@
 // deno-lint-ignore-file no-unused-vars ban-unused-ignore
-import MyComponent from "./components/MyComponent";
-import GameWindow from './lib/GameWindow';
-import GObject from "./lib/GObject";
-import Scene from "./lib/Scene";
+import MyComponent from "./components/MyComponent.ts";
+import GameWindow from './lib/GameWindow.ts';
+import GObject from "./lib/GObject.ts";
+import Scene from "./lib/Scene.ts";
+import MyGObject from "./objects/MyGObject.ts";
 
 new GameWindow("tela")
 .setResolution(512, 512)
 .pushScene(
     new Scene("cena1")
     .addObject(
-        new GObject("objeto1")
+        new MyGObject()
         .addComponent(new MyComponent)
     )
 )
