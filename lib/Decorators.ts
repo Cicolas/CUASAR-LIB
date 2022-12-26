@@ -2,5 +2,6 @@
 export function dontDestroy(constructor: any) {
     return class extends constructor {
         dontDestroy = true;
+
     };
 }

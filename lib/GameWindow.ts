@@ -1,27 +1,40 @@
 // deno-lint-ignore-file no-inferrable-types
-import Scene from "./Scene";
+import Scene from "./Scene.ts";
 
 export default class GameWindow {
-    private _name: string = "";
+    #name: string = "";
+    public get name() : string { return this.#name; }
+    private set name(v: string) { this.#name = v; }
 
-    public isRunning: boolean = false;
-
-    public get name() : string {
-        return this._name;
+    private isRunning: boolean = false;
+    public shutdown(delay: number = 0) {
+        setTimeout(() => {this.isRunning = false}, delay);
     }
 
     private width: number = 0;
     private height: number = 0;
-    public frame: number = 0;
-    public fps: number = 0;
-    public dt: number = 0;
-    public pause: boolean = false;
+
+    #frame: number = 0;
+    public get frame() : number { return this.#frame; }
+    private set frame(v: number) { this.#frame = v; }
+
+    #fps: number = 0;
+    public get fps() : number { return this.#fps; }
+    private set fps(v: number) { this.#fps = v; }
+
+    #dt: number = 0;
+    public get dt() : number { return this.#dt; }
+    private set dt(v: number) { this.#dt = v; }
+
+    #pause: boolean = false;
+    public pause() { this.#pause = true; }
+    public resume() { this.#pause = false; }
 
     private lastFrameTime: number = 0;
     private scene: Scene[] = [];
 
     constructor(name: string) {
-        this._name = name;
+        this.name = name;
     }
 
     public setResolution(width: number, height: number): GameWindow {
@@ -31,9 +44,10 @@ export default class GameWindow {
     }
 
     public pushScene(scene: Scene): GameWindow {
-        this.scene.push(scene.initScene(this));
+        this.scene.push(scene);
         return this;
     }
+
     public popScene(): GameWindow {
         const dontDestroyObj = this.scene[this.scene.length-1].end(this);
         this.scene.pop();
@@ -65,9 +79,7 @@ export default class GameWindow {
 
     public updateNRender(): void {
         while (this.isRunning) {
-            if (!this.pause) {
-                this.updateGame().drawGame();
-            }
+            if (!this.#pause) this.updateGame().drawGame();
         }
     }
 

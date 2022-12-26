@@ -1,27 +1,25 @@
 // deno-lint-ignore-file no-unused-vars
-import ComponentInterface from "../lib/Component";
-import GameWindow from "../lib/GameWindow";
-import GObject from "../lib/GObject";
+import ComponentInterface from "../lib/Component.ts";
+import GameWindow from "../lib/GameWindow.ts";
+import GObject from "../lib/GObject.ts";
 
 export default class MyComponent implements ComponentInterface {
-    public name = "My Component";
+    public get name() : string {
+        return "My Component"
+    }
     private number = 0;
 
-    init() {
-        console.log(this.name);
-    }
+    init(obj: GObject, gameWin: GameWindow) {
+        const mc = obj.getComponent(MyComponent);
 
-    postInit() {}
+        console.log(obj.getComponent(MyComponent));
+    }
 
     update(obj: GObject, gameWin: GameWindow){
         console.log(this.number);
-        this.number++;
 
-        if (this.number > 10) {
-            gameWin.isRunning = false;
+        if(this.number++ >= 10) {
+            gameWin.pause();
         }
     }
-
-    draw(){}
-    destroy() {}
 }
